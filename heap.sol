@@ -46,12 +46,14 @@ library MinHeap_impl[T] {
 // Use in your contract:
 
 contract MyContractUsingHeap {
+  // Binds all functions from MinHeap_impl[uint] to Heap[uint].
+  using MinHeap_impl[uint] for Heap[uint];
   Heap[uint] m_heap;
   function addSomething(uint val) {
     // This will use CALLCODE to invoke a contract that
     // is deployed only once and can be re-used by all
     // other contracts.
-    MinHeap_impl.insert(m_heap, val);
+    m_heap.insert(val);
   }
 }
 
