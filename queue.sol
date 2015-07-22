@@ -1,34 +1,54 @@
-/// @title implements a ring buffer
-/// @dev some unimplemented features (templated structs and exceptions)
-/// of the compiler are only used in comments.
-// struct queue[Value,Capacity]
+////////////////////////////////////////////////////////////
+// This is an example contract hacked together at a meetup.
+// It is by far not complete and only used to show some
+// features of Solidity.
+////////////////////////////////////////////////////////////
 contract queue
 {
-    uint/*Value*/[2**64/*Capacity*/] q;
-    uint front = 0;
-    uint back = 0;
+    struct Queue {
+        uint[] data;
+        uint front;
+        uint back;
+    }
     /// @dev the number of elements stored in the queue.
-    function length() constant returns (uint) { return back - front; }
+    function length(Queue storage q) constant internal returns (uint) {
+        return q.back - q.front;
+    }
     /// @dev the number of elements this queue can hold
-    /// @invariant capacity() < length()
-    function capacity() constant returns (uint) { return q.length - 1; }
+    function capacity(Queue storage q) constant internal returns (uint) {
+        return q.data.length - 1;
+    }
     /// @dev push a new element to the back of the queue
-    /// @precondition length() < capacity() - 1
-    function push(uint /*Value*/ data)
+    function push(Queue storage q, uint data) internal
     {
-        if ((back + 1) % q.length == front)
+        if ((q.back + 1) % q.data.length == q.front)
             return; // throw;
-        q[back] = data;
-        back = (back + 1) % q.length;
+        q.data[q.back] = data;
+        q.back = (q.back + 1) % q.data.length;
     }
     /// @dev remove and return the element at the front of the queue
-    /// @precondition length() > 0
-    function pop() returns (uint /* Value */ r)
+    function pop(Queue storage q) internal returns (uint r)
     {
-        if (back == front)
+        if (q.back == q.front)
             return; // throw;
-        r = q[front];
-        delete q[front];
-        front = (front + 1) % q.length;
+        r = q.data[q.front];
+        delete q.data[q.front];
+        q.front = (q.front + 1) % q.data.length;
+    }
+}
+
+contract QueueUserMayBeDeliveryDroneCotnrol is queue {
+    Queue requests;
+    function QueueUserMayBeDeliveryDroneCotnrol() {
+        requests.data.length = 200;
+    }
+    function addRequest(uint d) {
+        push(requests, d);
+    }
+    function popRequest() returns (uint) {
+        return pop(requests);
+    }
+    function queueLength() returns (uint) {
+        return length(requests);
     }
 }
