@@ -37,9 +37,9 @@ contract queue
     }
 }
 
-contract QueueUserMayBeDeliveryDroneCotnrol is queue {
+contract QueueUserMayBeDeliveryDroneControl is queue {
     Queue requests;
-    function QueueUserMayBeDeliveryDroneCotnrol() {
+    function QueueUserMayBeDeliveryDroneControl() {
         requests.data.length = 200;
     }
     function addRequest(uint d) {
