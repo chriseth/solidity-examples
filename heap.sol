@@ -18,7 +18,7 @@
    * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    * SOFTWARE.
    */
-   
+
 struct Heap[T] {
     T[] data;
 }
@@ -106,20 +106,3 @@ library MaxHeap_impl[T] {
     _heap.data.length--;
   }
 }
-
-
-
-// Use in your contract:
-
-contract MyContractUsingHeap {
-  // Binds all functions from MinHeap_impl[uint] to Heap[uint].
-  using MinHeap_impl[uint] for Heap[uint];
-  Heap[uint] m_heap;
-  function addSomething(uint val) {
-    // This will use CALLCODE to invoke a contract that
-    // is deployed only once and can be re-used by all
-    // other contracts.
-    m_heap.insert(val);
-  }
-}
-
